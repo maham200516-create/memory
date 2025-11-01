@@ -1,153 +1,92 @@
 import tkinter as tk
 import time
+from tkinter import messagebox
+import random
 
-m=tk.Tk()
-m.geometry("710x630")
+m=tk.Tk()                                   #main window
+m.geometry("700x650")
 m.title("Flipping Cards-Memory Game")
-m.configure(padx=10, pady=20,
-            background="light blue")
-title_frame=tk.Frame(m,
-                     width=680,
-                     height=560)
-title_frame.pack(side="top",
-                 fill="x",
-                 pady=10)
-game_title= tk.Label(title_frame,
-                     text="Flipping Cards-Memory Game",
-                     font=("Arial",35,"bold"),
-                     background="light blue")
-game_title.pack(anchor="center",
-                fill="x")
-card_frame=tk.Frame(m,
-                    width=480,
-                    height=560,
-                    padx=10,
-                    pady=10,
-                    background="yellow")
+m.configure(padx=10,pady=20,background="light pink")
+title_frame=tk.Frame(m,width=600,height=500)
+title_frame.pack(side="top", fill="x", pady=10)
+game_title= tk.Label(title_frame,text="Flipping Cards-Memory Game",font=("Arial",35,"bold"),background="light pink")
+game_title.pack(anchor="center",fill="x")
+card_frame=tk.Frame(m,width=650,height=600,padx=10,pady=10)
 card_frame.pack(side="left")
-lives_text="❤❤❤"
-lives=tk.Label(m,
-               text=lives_text,
-               font=("Arial",20),
-               bg="light blue",
-               pady=50)
-lives.place(x=480,
-            y=100)
-score_label=tk.Label(m,
-                     text="Score:",
-                     font=("Helvetica",24),
-                     bg="light blue")
-score_label.place(x=480,
-                  y=300)
-
+lives_text="❤❤❤❤❤"
+lives=tk.Label(m,text=lives_text,font=("Arial",20),pady=50,bg="light pink")
+lives.place(x=500,y=100)
+score_label=tk.Label(m,text="Score:",font=("Arial",20,"bold"),bg="light pink")
+score_label.place(x=500, y=300)
 score=0
-game_score=tk.Label(m,
-                    text=score,
-                    font=("Arial",24),
-                    bg="light blue")
-game_score.place(x=600,
-                 y=300)
-def h_t_play():
-    m2=tk.Tk()
-    m2.geometry("700x200")
-    m2.title("Rules")
+game_score=tk.Label(m,text=score,font=("Arial",20,"bold"),bg="light pink")
+game_score.place(x=600,y=300)
 
-    rule1=tk.Label(m2,
-                   text="1)You have total of three lives",
-                   font=("Arial",15))
-    rule1.place(x=0,
-                y=0)
-    rule2=tk.Label(m2,
-                   text="2)For odd selection:select any Card ",
-                   font=("Arial",15))
-    rule2.place(x=0,
-                y=30)
-    rule3=tk.Label(m2,
-                   text="3)For even selection: selected card should have same number as\nprevious odd card  ",
-                   font=("Arial",15))
-    rule3.place(x=0,
-                y=60)
-    rule4=tk.Label(m2,
-                   text="4)on even selection if number didnt match with previous odd selection\nyou lose ",
-                   font=("Arial",15))
-    rule4.place(x=0,
-                y=120)
+def h_t_play():                         #function explaining the game
+    m1=tk.Tk()                          #new window
+    m1.geometry("700x250")
+    m1.title("Rules")
 
-h_t_p=tk.Button(m,
-                text="How To Play?👀",
-                font=("Arial",17,"bold"),
-                relief="flat",
-                bg="light blue",
-                activebackground="light blue",
-                cursor="hand2",
-                command=h_t_play)
-h_t_p.place(x=480,y=500)
+    rule1=tk.Label(m1,text="1)You have total of three lives.",font=("Arial",15))
+    rule1.place(x=0,y=0)
+    rule2=tk.Label(m1,text="2)Select two cards.",font=("Arial",15))
+    rule2.place(x=0,y=30)
+    rule3=tk.Label(m1,text="3)If both cards have the same number, game continues.",font=("Arial",15))
+    rule3.place(x=0,y=60)
+    rule4=tk.Label(m1,text="4)If both cards do not have the same number,\n you lose 1 life.",font=("Arial",15))
+    rule4.place(x=0,y=120)
+    rule5 = tk.Label(m1,text="5)If all 3 lives are gone, you lose.",font=("Arial", 15))
+    rule5.place(x=0,y=180)
 
-buttons=[]
-lst=[]
+h_t_p=tk.Button(m,text="Rules",font=("Arial",20,"bold"),relief="flat",bg="light pink",activebackground="white",cursor="hand2",command=h_t_play)
+h_t_p.place(x=500,y=500)
+
+buttons=[]         #cards
+lst=[]             #input
+clicked=[]         #card tracking
+
 class Cards:
-    def __init__(self,value,j,i):
-        self.button=tk.Button(card_frame,
-                              text=value,
-                              font=("Arial",19,"bold"),
-                              height=2,
-                              width=5,
-                              bg="white",
-                              activebackground="white",
-                              foreground="black",
-                              borderwidth=1.5,
-                              relief="sunken")
-        self.button.grid(row=j+200,
-                         column=i)
+    def __init__(self,value,j,i):                   #function to make buttons
         self.value=value
+        self.button=tk.Button(card_frame,text="X",font=("Arial",20,"bold"),height=2,width=5,bg="white",activebackground="grey",foreground="black",borderwidth=1.5,relief="sunken",command=self.click,cursor="hand2")
+        self.button.grid(row=j,column=i)
         buttons.append(self.button)
-def rotate(self):
-    self.button.configure(text="X")
 
-    def click(self):
-        global lst, score,lives_text
-        self.button.configure(text=self.value,bg="#D3D3D3",state="disabled")
-        lst.append(self.value)
+    def click(self):                        #function inputs numbers and checks them for validity
+        global lst, score,lives_text,clicked
+        if len(lst)==2:                     #corectly matched cards stay flipped
+            return
+        self.button.configure(text=self.value,bg="grey",state="disabled")   #flips cards
+        lst.append(self.value)                                                 #inputs numbers
+        clicked.append(self.button)                                             #tracks cards
         if len(lst)==2:
             m.update()
             time.sleep(0.5)
-            if lst[0] == lst[1]:
+            if lst[0] == lst[1]:                  #checks if both numbers are same
                 score=score+1
                 game_score.configure(text=score)
-                for button in buttons:
-                    if button.cget("state") == "disabled":
+                for button in clicked:             #makes cards unavailable
                         button.configure(state="disabled")
-                        card_frame.update()
-                        m.update()
             else:
-                if len(lives_text)>2:
-                    lives_text = lives_text[:len(lives_text)-2]
-                    lives.configure(text=lives_text)
+                if len(lives_text)>1:                 #checks if lives are available and removes one for wrong selection
+                    lives_text = lives_text[:len(lives_text)-1]
+                    lives.configure(text=lives_text)                #updating lives
                 else:
-                    pass
-                score = 0
-                game_score.configure(text=score)
-                for button in buttons:
-                    if button.cget("state")=="disabled":
-                        button.configure(text="X",bg="white",foreground="black")
-                        card_frame.update()
-                        m.update()
-            lst=[]
-but_value=[3, 2, 4, 3, 6, 6, 5, 2, 5, 4]
-for i in range(6):
-    for j in range(5):
-        if j%2==0:
-            x=Cards(but_value[i],j,i)
-        else:
-            x=Cards(but_value[5+i],j,i)
+                    lives_text = lives_text[:len(lives_text) - 1]
+                    lives.configure(text=lives_text)
+                    messagebox.showerror("You lose!",lives_text)
+                    m.destroy()
+                    return                  #ends game
+                for button in clicked:                          #if unmatched makes cards available
+                    button.configure(text="X",bg="white",state="normal",foreground="black")
+            clicked=[]                  #empties the button tracking list
+            lst=[]                      #empties input taking list
+button_value=[3, 2, 4, 3, 6, 6, 5, 2, 5, 4]*3                        #cards
+random.shuffle(button_value)                                         #makes cards random
+a=0
+for j in range(6):
+    for i in range(5):
+        x=Cards(button_value[a],j,i)
+        a+=1
         m.update()
-        time.sleep(0.1)
-        x.rotate()
-        m.update()
-
-
-
-
-
-
 m.mainloop()
