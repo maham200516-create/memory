@@ -9,11 +9,11 @@ m.title("Flipping Cards-Memory Game")
 m.configure(padx=10,pady=20,background="light pink")
 title_frame=tk.Frame(m,width=600,height=500)
 title_frame.pack(side="top", fill="x", pady=10)
-game_title= tk.Label(title_frame,text="Flipping Cards-Memory Game",font=("Arial",35,"bold"),background="light pink")
+game_title= tk.Label(title_frame,text="Flipping Cards-Memory Game",font=("Arial",35,"bold"),background="light pink",foreground="purple")
 game_title.pack(anchor="center",fill="x")
 card_frame=tk.Frame(m,width=650,height=600,padx=10,pady=10)
 card_frame.pack(side="left")
-lives_text="❤❤❤❤❤"
+lives_text="❤❤❤❤❤\n❤❤❤❤❤"
 lives=tk.Label(m,text=lives_text,font=("Arial",20),pady=50,bg="light pink")
 lives.place(x=500,y=100)
 score_label=tk.Label(m,text="Score:",font=("Arial",20,"bold"),bg="light pink")
@@ -35,10 +35,10 @@ def h_t_play():                         #function explaining the game
     rule3.place(x=0,y=60)
     rule4=tk.Label(m1,text="4)If both cards do not have the same number,\n you lose 1 life.",font=("Arial",15))
     rule4.place(x=0,y=120)
-    rule5 = tk.Label(m1,text="5)If all 3 lives are gone, you lose.",font=("Arial", 15))
+    rule5 = tk.Label(m1,text="5)If all lives are gone, you lose.",font=("Arial", 15))
     rule5.place(x=0,y=180)
 
-h_t_p=tk.Button(m,text="Rules",font=("Arial",20,"bold"),relief="flat",bg="light pink",activebackground="white",cursor="hand2",command=h_t_play)
+h_t_p=tk.Button(m,text="Rules",font=("Arial",20,"bold"),relief="flat",bg="light pink",activebackground="grey",cursor="hand2",command=h_t_play)
 h_t_p.place(x=500,y=500)
 
 buttons=[]         #cards
@@ -48,7 +48,7 @@ clicked=[]         #card tracking
 class Cards:
     def __init__(self,value,j,i):                   #function to make buttons
         self.value=value
-        self.button=tk.Button(card_frame,text="X",font=("Arial",20,"bold"),height=2,width=5,bg="white",activebackground="grey",foreground="black",borderwidth=1.5,relief="sunken",command=self.click,cursor="hand2")
+        self.button=tk.Button(card_frame,text="X",font=("Arial",20,"bold"),height=2,width=5,bg="white",activebackground="grey",foreground="purple",borderwidth=1.5,relief="sunken",command=self.click,cursor="hand2")
         self.button.grid(row=j,column=i)
         buttons.append(self.button)
 
@@ -90,3 +90,4 @@ for j in range(6):
         a+=1
         m.update()
 m.mainloop()
+
